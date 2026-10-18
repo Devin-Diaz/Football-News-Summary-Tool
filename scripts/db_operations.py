@@ -62,3 +62,24 @@ def store_articles(conn, article_data: dict):
                     ON CONFLICT(article_id, competition, query)
                     DO NOTHING
                 """, (article_id, league, query))
+
+
+# Fetch entries where publisher url is unresolved
+def get_unresolved_articles(conn):
+    return conn.execute("""
+        SELECT id, source_url
+        FROM articles
+        WHERE publisher_url IS NULL
+        ORDER BY id
+    """).fetchall()
+
+
+# Saves publisher url to respective entry
+def store_publisher_url(conn, publisher_url, article_id):
+    with conn:
+        conn.execute("""
+            UPDATE articles
+            SET publisher_url = ?
+            WHERE id = ?
+        
+        """, (publisher_url, article_id))

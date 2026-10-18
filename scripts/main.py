@@ -2,8 +2,8 @@ import json
 import sqlite3
 from pathlib import Path
 
-from db import create_tables, store_articles
-from scripts.tools import save_articles
+from scripts.db_operations import create_tables, store_articles
+from scripts.retrieve_article_data import save_articles
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
