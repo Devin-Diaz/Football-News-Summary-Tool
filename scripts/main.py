@@ -3,13 +3,13 @@ import sqlite3
 from pathlib import Path
 
 from db import create_tables, store_articles
-from retrieve import save_articles
+from scripts.tools import save_articles
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 DB_DIR = BASE_DIR / "database"
 
-# 
+
 def main():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     DB_DIR.mkdir(parents=True, exist_ok=True)

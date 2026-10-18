@@ -1,0 +1,3 @@
+Gnews: https://pypi.org/project/gnews/
+Playwright: https://playwright.dev/python/docs/library
+

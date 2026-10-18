@@ -4,6 +4,8 @@ Fetches relevant football articles from Google News API and saves metadata.
 
 from gnews import GNews
 import json
+from urllib.parse import urlparse
+from playwright.sync_api import sync_playwright
 
 news = GNews(language='en', 
                     period='1d', 
@@ -48,12 +50,54 @@ def retrieve_articles():
     
     return articles_by_league
 
+
 # Saves populated dict article data into json
 def save_articles(path):
     article_data = retrieve_articles()
 
     with open(path, "w", encoding="utf-8") as file:
         json.dump(article_data, file, indent=4)
+
+
+# Establishes that destination url is non google web url via various conditions
+def is_publisher_url(url: str) -> bool:
+    parsed = urlparse(url)
+    host = (parsed.hostname or "").lower()
+
+    return (
+        parsed.scheme in {"http", "https"}
+        and bool(host)
+        and host != "google.com"
+        and not host.endswith(".google.com")
+    )
+
+
+# Returns article publisher url via original source url
+def resolve_source_url(source_url: str) -> str:
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+
+        try:
+            page = browser.new_page()
+
+            page.goto(
+                source_url,
+                wait_until="domcontentloaded",
+                timeout=30_000,
+            )
+
+            page.wait_for_url(
+                is_publisher_url,
+                wait_until="domcontentloaded",
+                timeout=30_000,
+            )
+
+            return page.url
+        finally:
+            browser.close()
+
+
+
 
 
 
