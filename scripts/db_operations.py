@@ -83,3 +83,25 @@ def store_publisher_url(conn, publisher_url, article_id):
             WHERE id = ?
         
         """, (publisher_url, article_id))
+
+
+# Fetches all articles with resolved publisher url
+def get_resolved_articles(conn):
+    return conn.execute("""
+        SELECT id, publisher_url
+        FROM articles
+        WHERE publisher_url IS NOT NULL
+            AND full_text IS NULL
+        ORDER BY id
+        """).fetchall()
+
+
+# Stores full text to respective article 
+def store_full_text(conn, full_text, article_id):
+    with conn:
+        conn.execute("""
+            UPDATE articles
+            SET full_text = ?
+            WHERE id = ?
+        """, (full_text, article_id))
+
