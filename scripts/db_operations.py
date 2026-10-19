@@ -81,7 +81,6 @@ def store_publisher_url(conn, publisher_url, article_id):
             UPDATE articles
             SET publisher_url = ?
             WHERE id = ?
-        
         """, (publisher_url, article_id))
 
 
@@ -104,4 +103,27 @@ def store_full_text(conn, full_text, article_id):
             SET full_text = ?
             WHERE id = ?
         """, (full_text, article_id))
+
+
+# Fetch articles with populated full text
+def get_completed_entries(conn):
+    return conn.execute("""
+        SELECT id, publisher, publisher_url, published_at, 
+               title, description, full_text
+        FROM articles
+        WHERE full_text IS NOT NULL
+            AND TRIM(full_text) != ''
+            AND summary IS NULL
+        ORDER BY id
+    """).fetchall()
+
+
+# Save article summary
+def store_article_summary(conn, summary, article_id):
+    with conn:
+        conn.execute("""
+            UPDATE articles
+            SET summary = ?
+            WHERE id = ?
+        """, (summary, article_id))
 

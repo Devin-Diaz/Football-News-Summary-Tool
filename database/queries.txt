@@ -1,2 +1,0 @@
-ALTER TABLE articles ADD COLUMN publisher_url TEXT;
-
