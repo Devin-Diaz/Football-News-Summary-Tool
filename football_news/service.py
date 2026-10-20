@@ -2,36 +2,41 @@
 Main pipelone workflow for data creation & and presenting
 """
 
-# service.py
 import json
 import sqlite3
 
-from scripts.db_operations import (
+from football_news.config import (
+    ARTICLE_METADATA_PATH,
+    DATABASE_PATH,
+    create_directories
+)
+
+from football_news.db_operations import (
     create_tables, 
     store_articles,
     get_final_summarized_outputs,
 )
 
-from scripts.retrieve_article_data import (
+from football_news.retrieve_article_data import (
     save_base_articles_metadata,
     extract_article_full_text,
 )
 
-from scripts.resolve_source_urls import resolve_pending_urls_workflow
-from scripts.invoke_llm import generate_article_summary_workflow
+from football_news.resolve_source_urls import resolve_pending_urls_workflow
+from football_news.invoke_llm import generate_article_summary_workflow
 
 
 # Runs article summary workflow end-to-end
-def run_news_pipeline(json_path, db_path):
-    json_path.parent.mkdir(parents=True, exist_ok=True)
-    db_path.parent.mkdir(parents=True, exist_ok=True)
+def run_news_pipeline():
+    
+    create_directories()
 
-    save_base_articles_metadata(json_path)
+    save_base_articles_metadata(ARTICLE_METADATA_PATH)
 
-    with open(json_path, encoding="utf-8") as file:
+    with open(ARTICLE_METADATA_PATH, encoding="utf-8") as file:
         article_data = json.load(file)
 
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
 
     try:
@@ -50,8 +55,8 @@ def run_news_pipeline(json_path, db_path):
 
 
 # Returns current article summaries.
-def get_completed_news_summaries(db_path):
-    conn = sqlite3.connect(db_path)
+def get_completed_news_summaries():
+    conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
 
     try:

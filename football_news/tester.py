@@ -1,7 +1,7 @@
 import sqlite3
 import json
 from dotenv import load_dotenv
-from scripts.service import get_completed_news_summaries
+from football_news.service import get_completed_news_summaries
 
 
 db_path = 'database/football_news.db'
@@ -12,7 +12,7 @@ conn = sqlite3.connect(db_path)
 conn.row_factory = sqlite3.Row
 
 try:
-    articles = get_completed_news_summaries(db_path)
+    articles = get_completed_news_summaries()
     print(json.dumps(articles, indent=2, ensure_ascii=False))
 finally:
     conn.close()

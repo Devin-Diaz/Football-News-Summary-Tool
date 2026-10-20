@@ -6,7 +6,7 @@ from gnews import GNews
 import json
 from gnews import NetworkError
 import time
-from scripts.db_operations import get_resolved_articles, store_full_text
+from football_news.db_operations import get_resolved_articles, store_full_text
 
 news = GNews(language='en', 
                     period='1d', 

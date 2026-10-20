@@ -5,7 +5,7 @@ Handles resolving source google web URLs to actual article publisher URLs
 from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
 from playwright.sync_api import Error as PlaywrightError
-from scripts.db_operations import get_unresolved_articles, store_publisher_url
+from football_news.db_operations import get_unresolved_articles, store_publisher_url
 
 # Establishes that destination url is non google web url via various conditions
 def is_publisher_url(url: str) -> bool:
