@@ -4,12 +4,12 @@ Handles LLM related work for article summarization
 
 
 import json
-from prompts import ARTICLE_SUMMARY_INSTRUCTIONS
+from scripts.prompts import ARTICLE_SUMMARY_INSTRUCTIONS
 from openai import OpenAI
 import sqlite3
 from typing import Literal
 from pydantic import BaseModel
-from db_operations import get_completed_entries, store_article_summary
+from scripts.db_operations import get_completed_entries, store_article_summary
 
 
 # Stores metadata regarding LLM output
@@ -86,3 +86,4 @@ def generate_article_summary_workflow(conn):
                 print(f"Saved summary for: {article['title']}")
             else:
                 print(f"Rejected article {article['id']}: {result.reason}")
+

@@ -6,7 +6,7 @@ from gnews import GNews
 import json
 from gnews import NetworkError
 import time
-from db_operations import get_resolved_articles, store_full_text
+from scripts.db_operations import get_resolved_articles, store_full_text
 
 news = GNews(language='en', 
                     period='1d', 
@@ -53,7 +53,7 @@ def retrieve_articles():
 
 
 # Saves populated dict article data into json
-def save_articles(path):
+def save_base_articles_metadata(path):
     article_data = retrieve_articles()
 
     with open(path, "w", encoding="utf-8") as file:

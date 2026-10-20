@@ -127,3 +127,16 @@ def store_article_summary(conn, summary, article_id):
             WHERE id = ?
         """, (summary, article_id))
 
+
+# Will retrieve all finalized summary articles for user
+def get_final_summarized_outputs(conn):
+    return conn.execute("""
+        SELECT id, title, publisher, publisher_url,
+               published_at, summary
+        FROM articles
+        WHERE summary IS NOT NULL
+          AND TRIM(summary) != ''
+        ORDER BY id DESC
+    """).fetchall()
+
+

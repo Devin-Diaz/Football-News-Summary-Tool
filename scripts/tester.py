@@ -1,12 +1,7 @@
 import sqlite3
-from resolve_source_urls import resolve_pending_urls
-from retrieve_article_data import extract_article_full_text
-from db_operations import get_completed_entries
-from prompts import ARTICLE_SUMMARY_INSTRUCTIONS
-from invoke_llm import build_article_input, invoke_llm, generate_article_summary_workflow
-from gnews import GNews
-from openai import OpenAI
+import json
 from dotenv import load_dotenv
+from scripts.service import get_completed_news_summaries
 
 
 db_path = 'database/football_news.db'
@@ -16,13 +11,9 @@ load_dotenv()
 conn = sqlite3.connect(db_path)
 conn.row_factory = sqlite3.Row
 
-openai_client = OpenAI()
-
-articles = get_completed_entries(conn)
-
 try:
-    conn.execute("PRAGMA foreign_keys = ON")
-    generate_article_summary_workflow(conn)
+    articles = get_completed_news_summaries(db_path)
+    print(json.dumps(articles, indent=2, ensure_ascii=False))
 finally:
     conn.close()
 
