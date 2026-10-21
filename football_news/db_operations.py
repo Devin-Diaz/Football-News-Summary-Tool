@@ -64,6 +64,15 @@ def store_articles(conn, article_data: dict):
                 """, (article_id, league, query))
 
 
+# 
+def replace_articles(conn, article_data):
+    with conn:
+        # Delete child records before their referenced articles
+        conn.execute("DELETE FROM article_matches")
+        conn.execute("DELETE FROM articles")
+        store_articles(conn, article_data)
+
+
 # Fetch entries where publisher url is unresolved
 def get_unresolved_articles(conn):
     return conn.execute("""

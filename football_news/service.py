@@ -13,7 +13,7 @@ from football_news.config import (
 
 from football_news.db_operations import (
     create_tables, 
-    store_articles,
+    replace_articles,
     get_final_summarized_outputs,
 )
 
@@ -36,6 +36,10 @@ def run_news_pipeline():
     with open(ARTICLE_METADATA_PATH, encoding="utf-8") as file:
         article_data = json.load(file)
 
+    # Avoid clearing existing data when retrieval returns nothing
+    if not any(article_data.values()):
+        raise ValueError("No articles retrieved; existing data was preserved")
+
     conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
 
@@ -43,7 +47,7 @@ def run_news_pipeline():
         conn.execute("PRAGMA foreign_keys = ON")
 
         create_tables(conn)
-        store_articles(conn, article_data)
+        replace_articles(conn, article_data)
 
         resolve_pending_urls_workflow(conn)
         extract_article_full_text(conn)

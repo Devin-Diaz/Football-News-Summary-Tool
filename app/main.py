@@ -36,7 +36,7 @@ app = FastAPI(
     openapi_tags=[
         {
             "name": "Articles",
-            "description": "Read saved football article summaries.",
+            "description": "",
         },
         {
             "name": "Health",
@@ -47,7 +47,6 @@ app = FastAPI(
 )
 
 app.include_router(router)
-
 
 @app.get("/health", tags=["Health"], summary="Check API availability")
 def health_check():
