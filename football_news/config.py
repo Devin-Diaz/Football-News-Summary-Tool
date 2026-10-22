@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 DATABASE_DIR = BASE_DIR / "database"
 
-ARTICLE_METADATA_PATH = DATA_DIR / "tester_data.json"
+ARTICLE_METADATA_PATH = DATA_DIR / "article_data.json"
 DATABASE_PATH = DATABASE_DIR / "football_news.db"
 
 
