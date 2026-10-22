@@ -4,6 +4,9 @@ Fetches relevant football articles from Google News API and saves metadata.
 
 from gnews import GNews
 import json
+from gnews import NetworkError
+import time
+from football_news.db_operations import get_resolved_articles, store_full_text
 
 news = GNews(language='en', 
                     period='1d', 
@@ -22,7 +25,7 @@ base_league_queries = {
 }
 
 # final_topics = ["results", "injury", "transfer"]
-topics = ["results", "injury"]
+topics = ["results"]
 
 
 # Fetches articles via custom query prompts and returns metadata of each article associated with base league
@@ -48,15 +51,36 @@ def retrieve_articles():
     
     return articles_by_league
 
+
 # Saves populated dict article data into json
-def save_articles(path):
+def save_base_articles_metadata(path):
     article_data = retrieve_articles()
 
     with open(path, "w", encoding="utf-8") as file:
         json.dump(article_data, file, indent=4)
 
 
+# Extracts full text from article via publisher URL
+def extract_article_full_text(conn, delay_seconds=4):
+    resolved_articles = get_resolved_articles(conn)
 
+    for index, (article_id, publisher_url) in enumerate(resolved_articles):
+        # Pause between attemps including failed extractions
+        if index > 0:
+            time.sleep(delay_seconds)
+        
+        try:
+            full_article_obj = news.get_full_article(publisher_url)
+            full_text = full_article_obj.get("text", "").strip()
 
+        except NetworkError as error:
+            print(f"Could not extract article {article_id}: {error}")
+            continue
 
+        if not full_text:
+            print(f"No text extracted from article: {article_id}")
+            continue
+
+        store_full_text(conn, full_text, article_id)
+        print(f"Saved full text for article: {article_id}")
 
