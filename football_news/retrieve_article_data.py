@@ -25,7 +25,7 @@ base_league_queries = {
 }
 
 # final_topics = ["results", "injury", "transfer"]
-topics = ["results", "injury"]
+topics = ["results"]
 
 
 # Fetches articles via custom query prompts and returns metadata of each article associated with base league

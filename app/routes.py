@@ -1,19 +1,24 @@
 from fastapi import APIRouter
 
+from fastapi import HTTPException
 from app.schemas import Article
-from football_news.service import get_completed_news_summaries, run_news_pipeline
+from football_news.service import (get_completed_news_summaries, 
+                                   run_news_pipeline,
+                                   get_article_by_id)
 
 HTTP_200_OK = 200
 HTTP_404_NOT_FOUND = 404
 
+
 router = APIRouter(
-    prefix="/v1",
+    prefix="/v1/articles",
     tags=["Articles"],
 )
 
+
 # Fetch completed entries
 @router.get(
-    "/articles",
+    "/all",
     status_code=HTTP_200_OK,
     response_model=list[Article],
     summary="Get summarized football news",
@@ -27,11 +32,26 @@ def list_articles():
     return get_completed_news_summaries()
 
 
+# Fetch a single article by ID
+@router.get(
+    "/{article_id}",
+    summary='Retrieve article by id',
+    response_model=Article,
+)
+def retrieve_article_by_id(article_id: int):
+    article = get_article_by_id(article_id)
+
+    if article is None:
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="Article not found")
+
+    return article
+
+
 # Generate new entries
 @router.post(
     "/refresh_news",
     status_code=HTTP_200_OK,
-    response_model=str,
+    response_model=dict[str, str],
     summary="Refresh flow for new football articles",
     description=(
         "Invokes refresh workflow that will generate a new set of "
@@ -39,4 +59,4 @@ def list_articles():
     ),
 )
 def refresh_articles():
-    run_news_pipeline()
+    return run_news_pipeline()

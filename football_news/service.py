@@ -15,6 +15,7 @@ from football_news.db_operations import (
     create_tables, 
     replace_articles,
     get_final_summarized_outputs,
+    fetch_article_by_id
 )
 
 from football_news.retrieve_article_data import (
@@ -70,3 +71,13 @@ def get_completed_news_summaries():
         conn.close()
 
 
+# display single article via it's ID
+def get_article_by_id(article_id):
+    conn = sqlite3.connect(DATABASE_PATH)
+    conn.row_factory = sqlite3.Row
+
+    try:
+        row = fetch_article_by_id(conn, article_id)
+        return dict(row) if row is not None else None
+    finally:
+        conn.close()

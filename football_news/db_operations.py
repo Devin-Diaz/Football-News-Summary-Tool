@@ -64,13 +64,23 @@ def store_articles(conn, article_data: dict):
                 """, (article_id, league, query))
 
 
-# 
+# Resets data in database in preperation for new batch of articles
 def replace_articles(conn, article_data):
     with conn:
         # Delete child records before their referenced articles
         conn.execute("DELETE FROM article_matches")
         conn.execute("DELETE FROM articles")
         store_articles(conn, article_data)
+
+
+# Fetch articles by ID
+def fetch_article_by_id(conn, article_id):
+    return conn.execute("""
+        SELECT id, title, publisher, publisher_url, published_at, summary
+        FROM articles
+        WHERE id = ?
+            AND summary IS NOT NULL
+    """, (article_id,)).fetchone()
 
 
 # Fetch entries where publisher url is unresolved
