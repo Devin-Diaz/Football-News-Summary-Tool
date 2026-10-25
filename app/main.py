@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from app.routes import router
 from football_news.config import BASE_DIR, DATABASE_PATH, create_directories
@@ -47,6 +48,12 @@ app = FastAPI(
 )
 
 app.include_router(router)
+
+app.mount(
+    "/ui",
+    StaticFiles(directory=BASE_DIR / "football_news_ui", html=True),
+    name="football_news_ui",
+)
 
 @app.get("/health", tags=["Health"], summary="Check API availability")
 def health_check():

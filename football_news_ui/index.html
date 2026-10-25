@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Brief</title>
+      <link rel="stylesheet" href="/ui/style.css">
+    <script src="/ui/app.js" defer></script>
+</head>
+<body>
+    <main class="container">
+        
+        <header class="page-header">
+            <p class="eyebrow">FOOTBALL BRIEF</p>
+            <h1>The latest, without the noise.</h1>
+            <p>AI summaries of football reporting. Read the original for the full story.</p>
+            <p>Developed by Devin Diaz.</p>
+        </header>
+
+        <section aria-labelledby="feed-heading">
+            <div class="feed-header">
+                <h2 id="feed-heading">Latest articles</h2>
+                <button id="reload-button" type="button">Reload feed</button>
+            </div>
+
+            <p id="status" role="status">Loading articles...</p>
+            <div id="article-list"></div>
+        </section>
+    </main>
+
+    <template id="article-template">
+        <article class="article">
+            <p class="article-meta">
+                <span class="publisher"></span>
+                <span aria-hidden="true"></span>
+                <span class="published-date"></span>
+            </p>
+
+            <h3 class="article-title"></h3>
+            <p class="article-summary"></p>
+            <a class="source-link" target="_blank" rel="noopener noreferrer">Read original article</a>
+        </article>
+    </template>
+</body>
+</html>
