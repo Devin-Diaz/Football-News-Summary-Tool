@@ -94,3 +94,292 @@ button:focus-visible {
   outline: 2px solid #78dba9;
   outline-offset: 4px;
 }
+
+
+#competition-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 24px 0;
+}
+#competition-filters .competition-button {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #e9eef4;
+  color: #11151b;
+  border: 3px solid transparent;
+  border-radius: 12px;
+}
+#competition-filters .competition-button img {
+  display: block;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+#competition-filters .competition-button[aria-pressed="true"] {
+  border-color: #23875b;
+  box-shadow: 0 0 0 2px #78dba9;
+}
+.ball-icon { font-size: 36px; line-height: 1; }
+.logo-fallback { font-size: 11px; font-weight: 700; text-align: center; }
+nav[aria-label="Article pages"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* Header */
+.page-header {
+  margin-bottom: 36px;
+}
+
+.page-header .eyebrow {
+  margin: 0 0 14px;
+  color: #78dba9;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.page-header h1 {
+  margin: 0 0 18px;
+  max-width: 650px;
+  color: #f0edf8;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 750;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.page-header .header-description {
+  max-width: 560px;
+  margin: 0;
+  color: #b4bfce;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.page-header .header-credit {
+  margin: 16px 0 0;
+  color: #b6a2d5;
+  font-size: 0.8rem;
+}
+
+/* League buttons */
+#competition-filters .competition-button {
+  position: relative;
+  isolation: isolate;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+/* Transparent shading sits over the logo. */
+#competition-filters .competition-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgb(120 219 169 / 25%),
+    rgb(166 125 232 / 30%)
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+#competition-filters .competition-button:not(:disabled):hover::after,
+#competition-filters .competition-button:focus-visible::after {
+  opacity: 1;
+}
+
+#competition-filters .competition-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  border-color: #b49add;
+  box-shadow: 0 4px 16px rgb(166 125 232 / 20%);
+}
+
+/* Keep the selected league identifiable while hovering. */
+#competition-filters .competition-button[aria-pressed="true"],
+#competition-filters .competition-button[aria-pressed="true"]:hover {
+  border-color: #78dba9;
+  box-shadow: 0 0 0 2px rgb(120 219 169 / 25%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #competition-filters .competition-button,
+  #competition-filters .competition-button::after {
+    transition: none;
+  }
+
+  #competition-filters .competition-button:not(:disabled):hover {
+    transform: none;
+  }
+}
+
+:root {
+  --accent-green: #78dba9;
+  --accent-purple: #b49add;
+  --text-primary: #edf0f7;
+  --text-muted: #aebbc9;
+}
+
+/* Green-to-purple main heading */
+.page-header h1 {
+  color: var(--text-primary);
+}
+
+@supports (background-clip: text) {
+  .page-header h1 {
+    background: linear-gradient(
+      110deg,
+      var(--text-primary) 15%,
+      var(--accent-green) 60%,
+      var(--accent-purple)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Feed heading */
+#feed-heading {
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+}
+
+#status {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Article panels */
+.article {
+  margin-bottom: 14px;
+  padding: 24px;
+  border: 1px solid #303b49;
+  border-radius: 12px;
+  background: #151b24;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+/* Subtle tint on hover and when a link has keyboard focus */
+.article:hover,
+.article:focus-within {
+  border-color: #665781;
+  background: #1b1e2c;
+}
+
+.article-title {
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  transition: color 180ms ease;
+}
+
+.article:hover .article-title,
+.article:focus-within .article-title {
+  color: var(--accent-purple);
+}
+
+/* Publisher badge */
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.publisher {
+  padding: 4px 9px;
+  border: 1px solid rgb(120 219 169 / 20%);
+  border-radius: 6px;
+  background: rgb(120 219 169 / 8%);
+  color: var(--accent-green);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.published-date {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* Keep the main reading text steady */
+.article-summary {
+  color: #d2d9e4;
+  line-height: 1.8;
+}
+
+/* Source links */
+.source-link {
+  display: inline-block;
+  color: var(--accent-green);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgb(120 219 169 / 35%);
+  text-underline-offset: 4px;
+  transition:
+    color 180ms ease,
+    text-decoration-color 180ms ease;
+}
+
+.source-link:hover,
+.source-link:focus-visible {
+  color: var(--accent-purple);
+  text-decoration-color: var(--accent-purple);
+}
+
+/* Reload and pagination buttons */
+#reload-button,
+nav[aria-label="Article pages"] button {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+#reload-button:not(:disabled):hover,
+nav[aria-label="Article pages"] button:not(:disabled):hover {
+  background: #292339;
+  border-color: var(--accent-purple);
+  color: #e5d8fa;
+}
+
+/* Text selection */
+::selection {
+  background: #574175;
+  color: #ffffff;
+}
+
+@media (max-width: 480px) {
+  .article {
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article,
+  .article-title,
+  .source-link,
+  #reload-button,
+  nav[aria-label="Article pages"] button {
+    transition: none;
+  }
+}
