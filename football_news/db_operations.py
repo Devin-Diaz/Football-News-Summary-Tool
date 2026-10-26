@@ -159,3 +159,54 @@ def get_final_summarized_outputs(conn):
     """).fetchall()
 
 
+# Verifies whcih articles qualify for filtering by competition
+def build_article_competition_filter(competition=None):
+    conditions = [
+        "a.summary is NOT NULL",
+        "TRIM(a.summary) != ''",
+    ]
+
+    parameters = []
+
+    if competition:
+        conditions.append("""
+            EXISTS (
+                SELECT 1
+                FROM article_matches AS m
+                WHERE m.article_id = a.id
+                    AND m.competition = ?
+            )
+        """)
+        parameters.append(competition)
+
+    return " AND ".join(conditions), parameters
+
+
+# Counts qualifying articles and returns page of entries
+def fetch_article_page(conn, *, page, page_size, competition=None):
+    where_clause, parameters = build_article_competition_filter(competition)
+
+    total = conn.execute(
+        f"""
+        SELECT COUNT(*)
+        FROM articles as a
+        WHERE {where_clause}
+        """,
+        parameters,
+    ).fetchone()[0]
+
+    offset = (page - 1) * page_size
+
+    rows = conn.execute(
+        f"""
+        SELECT a.id, a.title, a.publisher, a.publisher_url,
+            a.published_at, a.summary
+        FROM articles AS a
+        WHERE {where_clause}
+        ORDER BY a.id DESC
+        LIMIT ? OFFSET ?
+        """,
+        (*parameters, page_size, offset)
+    ).fetchall()
+
+    return rows, total

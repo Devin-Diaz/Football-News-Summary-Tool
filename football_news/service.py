@@ -15,6 +15,7 @@ from football_news.db_operations import (
     create_tables, 
     replace_articles,
     get_final_summarized_outputs,
+    fetch_article_page,
     fetch_article_by_id
 )
 
@@ -60,13 +61,39 @@ def run_news_pipeline():
 
 
 # Returns current article summaries.
-def get_completed_news_summaries():
+# def get_completed_news_summaries():
+#     conn = sqlite3.connect(DATABASE_PATH)
+#     conn.row_factory = sqlite3.Row
+
+#     try:
+#         rows = get_final_summarized_outputs(conn)
+#         return [dict(row) for row in rows]
+#     finally:
+#         conn.close()
+
+# Returns completed article summaries via pagination & filtering if needed
+def get_completed_news_summaries(*, page=1, page_size=10, competition=None,):
     conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
 
     try:
-        rows = get_final_summarized_outputs(conn)
-        return [dict(row) for row in rows]
+        # Keep the count and page queries in the same read snapshot
+        conn.execute("BEGIN")
+
+        rows, total = fetch_article_page(
+            conn,
+            page=page,
+            page_size=page_size,
+            competition=competition,
+        )
+
+        return {
+            "items": [dict(row) for row in rows],
+            "page": page,
+            "page_size": page_size,
+            "total": total,
+            "total_pages": (total + page_size - 1) // page_size,
+        }
     finally:
         conn.close()
 

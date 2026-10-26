@@ -4,18 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Football Brief</title>
-      <link rel="stylesheet" href="/ui/style.css">
-    <script src="/ui/app.js" defer></script>
+      <link rel="stylesheet" href="/ui/style.css?v=3">
+    <script src="/ui/app.js?v=3" defer></script>
 </head>
 <body>
     <main class="container">
-        
-        <header class="page-header">
-            <p class="eyebrow">FOOTBALL BRIEF</p>
-            <h1>The latest, without the noise.</h1>
-            <p>AI summaries of football reporting. Read the original for the full story.</p>
-            <p>Developed by Devin Diaz.</p>
-        </header>
+    <header class="page-header">
+        <p class="eyebrow">FOOTBALL BRIEF</p>
+        <h1>The latest, without the noise.</h1>
+        <p class="header-description">
+            AI summaries of football reporting. Read the original for the full story.
+        </p>
+        <p class="header-credit">Developed by Devin Diaz.</p>
+    </header>
+
+        <!-- Clickable logos for filtering by competition -->
+        <div id="competition-filters" role="group" aria-label="Filter by competition">
+            <button
+                type="button"
+                class="competition-button"
+                data-competition=""
+                aria-label="All competitions"
+                aria-pressed="true"
+                title="All competitions"
+            >
+            <span class="ball-icon" aria-hidden="true">⚽</span>
+            </button>
+
+            <button
+                type="button"
+                class="competition-button"
+                data-competition="UEFA Champions League"
+                aria-label="Champions League"
+                aria-pressed="false"
+                title="Champions League"
+            >
+                <img src="/ui/images/champions-league.webp" alt="" width="44" height="44">
+            </button>
+
+            <button
+                type="button"
+                class="competition-button"
+                data-competition="Premier League"
+                aria-label="Premier League"
+                aria-pressed="false"
+                title="Premier League"
+            >
+                <img src="/ui/images/premier-league.png" alt="" width="44" height="44">
+            </button>
+
+            <button
+                type="button"
+                class="competition-button"
+                data-competition="La Liga"
+                aria-label="La Liga"
+                aria-pressed="false"
+                title="La Liga"
+            >
+                <img src="/ui/images/laliga.png" alt="" width="44" height="44">
+            </button>
+
+            <button
+                type="button"
+                class="competition-button"
+                data-competition="Serie A"
+                aria-label="Serie A"
+                aria-pressed="false"
+                title="Serie A"
+            >
+                <img src="/ui/images/serie-a.png" alt="" width="44" height="44">
+            </button>
+
+            <button
+                type="button"
+                class="competition-button"
+                data-competition="Bundesliga"
+                aria-label="Bundesliga"
+                aria-pressed="false"
+                title="Bundesliga"
+            >
+                <img src="/ui/images/bundesliga.png" alt="" width="44" height="44">
+            </button>
+
+            <button
+                type="button"
+                class="competition-button"
+                data-competition="Ligue 1"
+                aria-label="Ligue 1"
+                aria-pressed="false"
+                title="Ligue 1"
+            >
+            <img src="/ui/images/ligue-1.png" alt="" width="44" height="44">
+        </button>
+        </div>
 
         <section aria-labelledby="feed-heading">
             <div class="feed-header">
@@ -26,13 +107,21 @@
             <p id="status" role="status">Loading articles...</p>
             <div id="article-list"></div>
         </section>
+        
+        <!-- Pagination feature -->
+        <nav aria-label="Article pages">
+            <button id="previous-page" type="button" disabled>Previous</button>
+            <span id="page-label" aria-live="polite"></span>
+            <button id="next-page" type="button" disabled>Next</button>
+        </nav>
+
     </main>
 
     <template id="article-template">
         <article class="article">
             <p class="article-meta">
                 <span class="publisher"></span>
-                <span aria-hidden="true"></span>
+                <span aria-hidden="true"> · </span>
                 <span class="published-date"></span>
             </p>
 
@@ -41,5 +130,6 @@
             <a class="source-link" target="_blank" rel="noopener noreferrer">Read original article</a>
         </article>
     </template>
+
 </body>
 </html>

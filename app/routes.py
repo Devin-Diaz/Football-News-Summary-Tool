@@ -1,5 +1,8 @@
 from fastapi import APIRouter
 
+from typing import Annotated, Literal
+from fastapi import Query
+from app.schemas import ArticlePage
 from fastapi import HTTPException
 from app.schemas import Article
 from football_news.service import (get_completed_news_summaries, 
@@ -9,6 +12,15 @@ from football_news.service import (get_completed_news_summaries,
 HTTP_200_OK = 200
 HTTP_404_NOT_FOUND = 404
 
+Competition = Literal[
+    "UEFA Champions League",
+    "Premier League",
+    "La Liga",
+    "Serie A",
+    "Bundesliga",
+    "Ligue 1",
+]
+
 
 router = APIRouter(
     prefix="/v1/articles",
@@ -17,19 +29,37 @@ router = APIRouter(
 
 
 # Fetch completed entries
+# @router.get(
+#     "/all",
+#     status_code=HTTP_200_OK,
+#     response_model=list[Article],
+#     summary="Get summarized football news",
+#     description=(
+#         "Returns completed article summaries with their original "
+#         "headlines, publishers, publication dates, and source links. "
+#         "Reads saved results without triggering retrieval or LLM calls."
+#     ),
+# )
+# def list_articles():
+#     return get_completed_news_summaries()
+
+
+# Fetch completed entries
 @router.get(
     "/all",
-    status_code=HTTP_200_OK,
-    response_model=list[Article],
-    summary="Get summarized football news",
-    description=(
-        "Returns completed article summaries with their original "
-        "headlines, publishers, publication dates, and source links. "
-        "Reads saved results without triggering retrieval or LLM calls."
-    ),
+    response_model=ArticlePage,
+    summary="Get football summaries",
 )
-def list_articles():
-    return get_completed_news_summaries()
+def list_articles(
+    page: Annotated[int, Query(ge=1)] = 1,
+    page_size: Annotated[int, Query(ge=1, le=50)] = 10,
+    competition: Competition | None = None,
+):
+    return get_completed_news_summaries(
+        page=page,
+        page_size=page_size,
+        competition=competition,
+    )
 
 
 # Fetch a single article by ID
