@@ -9,10 +9,10 @@ import time
 from football_news.db_operations import get_resolved_articles, store_full_text
 
 news = GNews(language='en', 
-                    period='1d', 
+                    period='7d', 
                     start_date=None, 
                     end_date=None, 
-                    max_results=2, # final max_results will be 5
+                    max_results=5,
                     max_retries=3)
 
 base_league_queries = {
@@ -24,9 +24,7 @@ base_league_queries = {
     "Ligue 1": '"Ligue 1" France football'
 }
 
-# final_topics = ["results", "injury", "transfer"]
-topics = ["results"]
-
+topics = ["results", "injury", "transfer"]
 
 # Fetches articles via custom query prompts and returns metadata of each article associated with base league
 def retrieve_articles():
