@@ -1,6 +1,8 @@
 # Football News Summary Tool
 ## MVP:
-  A basic tool that will fetch me relevant football articles from past 1-2 days, and summarize each one for me. Like a newsletter.
-  More on the technical side, will use google news API to fetch articles, LLM will then be invoked via custom prompt to summarize.
+  A pipeline that will fetch recent football related articles from Europe's top 5 leagues and champions league. Articles are summarized by LLM
+  and can be viewed in a website forum format and be filtered by league.
+
+![Football Brief](football_brief.png)
 
 Run project: python -m uvicorn app.main:app --reload
